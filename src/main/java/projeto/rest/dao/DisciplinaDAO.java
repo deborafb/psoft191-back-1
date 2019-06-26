@@ -14,5 +14,6 @@ public interface DisciplinaDAO<T, ID extends Serializable> extends JpaRepository
 	Disciplina save(Disciplina disciplina);
 	@Query("SELECT d FROM Disciplina d WHERE LOWER(d.nome) LIKE CONCAT('%', LOWER(:nome), '%')")
 	List<Disciplina> findByNome(@Param("nome")String nome);
+	Disciplina findById(long id);
 }
 

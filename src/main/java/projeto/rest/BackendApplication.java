@@ -27,9 +27,9 @@ public class BackendApplication {
 	public FilterRegistrationBean filterJwt() {
 		FilterRegistrationBean filterRb = new FilterRegistrationBean();
 		filterRb.setFilter(new TokenFilter());
-		filterRb.addUrlPatterns("/private");
+		filterRb.addUrlPatterns("/private", "/v1/disciplina/*");
 		return filterRb;
-	}
+	}	
 	
 	@Bean
 	public FilterRegistrationBean corsFilter() {

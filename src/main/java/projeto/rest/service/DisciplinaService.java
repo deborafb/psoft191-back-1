@@ -2,6 +2,7 @@ package projeto.rest.service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,17 @@ public class DisciplinaService {
 	private static  DisciplinaDAO disciplinaDao;
 
 	@SuppressWarnings("rawtypes")
-	DisciplinaService(DisciplinaDAO disciplinaDao){
+	public DisciplinaService(DisciplinaDAO disciplinaDao){
         DisciplinaService.disciplinaDao = disciplinaDao;
     }     
 
     @SuppressWarnings("unchecked")
 	public List<Disciplina> procurar(String string) { 
         return disciplinaDao.findByNome(string);
+    }
+    
+	public Disciplina findById(long id) {
+    	return disciplinaDao.findById(id);
     }
 
 	public static Disciplina create(Disciplina disciplina) {

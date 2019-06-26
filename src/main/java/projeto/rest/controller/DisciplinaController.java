@@ -19,6 +19,7 @@ import projeto.rest.model.Disciplina;
 import projeto.rest.response.DisciplinaResponse;
 import projeto.rest.service.DisciplinaService;
 
+//É público
 @RestController
 @RequestMapping({"/v1/disciplinas"})
 public class DisciplinaController {
@@ -26,7 +27,7 @@ public class DisciplinaController {
 	private DisciplinaService disciplinaService;
 	private List<DisciplinaResponse> disciplinas;
 	
-	DisciplinaController(DisciplinaService disciplinaService) {
+	public DisciplinaController(DisciplinaService disciplinaService) {
 		this.disciplinaService = disciplinaService;
 	}
 
@@ -45,7 +46,7 @@ public class DisciplinaController {
 		}
 	    return new ResponseEntity<List<DisciplinaResponse>>(disciplinas, HttpStatus.OK);		
 	}
-	
+//Não é usado na API, apenas para cadastro das disciplinas previamente	
 	@PostMapping(value = "/")
 	@ResponseBody
 	public ResponseEntity<Disciplina> create(@RequestBody Disciplina disciplina) {
