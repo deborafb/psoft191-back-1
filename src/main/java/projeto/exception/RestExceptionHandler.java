@@ -1,4 +1,6 @@
-package projeto.exception;
+/*package projeto.exception;
+
+import java.sql.Date;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,4 +25,4 @@ public class RestExceptionHandler {
     }
 
 
-}
+}*/

@@ -1,5 +1,4 @@
 package projeto.rest.model;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -8,13 +7,13 @@ import lombok.Data;
 @Data
 @Entity
 public class Usuario {
-
+    @Id
+	private String email;
+    
     private String primeiroNome;
     private String ultimoNome;
-    private String senha;
-
-    @Id
-    private String email;
+    private String senha;   
+    
     public Usuario() {
 
     }
@@ -24,6 +23,5 @@ public class Usuario {
         this.ultimoNome = ultimoNome;
         this.email = email;
         this.senha = senha;
-    }
-
+    }   
 }
