@@ -2,6 +2,7 @@ package projeto.rest.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,5 @@ import projeto.rest.model.PerfilDisciplina;
 public interface ComentarioDAO <T, ID extends Serializable> extends JpaRepository<Comentario, Long> {
 	Comentario save(Comentario comentario);
 	List<Comentario> findAllByPerfil(PerfilDisciplina perfil);
-
+    Comentario findById(long id);
 }

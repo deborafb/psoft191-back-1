@@ -63,6 +63,29 @@ public class PerfilDisciplinaService {
 	public PerfilDisciplina adicionarComentario(PerfilDisciplina perfil, Comentario comentario) {		
 		comentario.setPerfil(perfil);
 		this.comentarioDao.save(comentario);				
+		return perfil;		
+	}
+	
+	public PerfilDisciplina deletarComentario(PerfilDisciplina perfil, long idComentario) {	
+		Comentario comentario = this.comentarioDao.findById(idComentario);
+		comentario.setPerfil(perfil);	
+		comentario.setApagado("sim");
+		this.comentarioDao.save(comentario);				
+		return perfil;		
+	}
+	
+	public PerfilDisciplina retirarLike(PerfilDisciplina perfil, long id) {
+		Likes like = this.likeDao.findById(id);
+		like.setPerfil(perfil);
+        this.likeDao.removeById(id);
+        return perfil;
+	}
+	//FaltaResolver
+	public PerfilDisciplina adicionarComentarioEmComentario(PerfilDisciplina perfil, long idComentarioPai, Comentario comentarioFilho) {
+		comentarioFilho.setPerfil(perfil);
+		Comentario comentario = this.comentarioDao.findById(idComentarioPai);		
+		//comentario.setFilhos(comentario.);
+		this.perfilDisciplinaDao.save(perfil);
 		return perfil;
 	}
 	
