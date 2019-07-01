@@ -13,7 +13,4 @@ import projeto.rest.model.PerfilDisciplina;
 public interface PerfilDisciplinaDAO<T, ID extends Serializable> extends JpaRepository<PerfilDisciplina, String> {	
 	PerfilDisciplina save(PerfilDisciplina perfil);	
 	PerfilDisciplina findByNomeDisciplina(String nome);
-	//@Query("SELECT d FROM PerfilDisciplina d")
-	//List<PerfilDisciplina> findAll();
-
 }

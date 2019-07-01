@@ -15,11 +15,7 @@ import lombok.Data;
 public class PerfilDisciplina {
 	
 	@Id
-    private String nomeDisciplina;  
-	
-	@OneToMany(mappedBy="perfil")
-	@JsonManagedReference
-	private List<Comentario> comentarios;	
+    private String nomeDisciplina; 
 	
 	@OneToMany(mappedBy="perfil")
 	@JsonManagedReference
@@ -52,9 +48,5 @@ public class PerfilDisciplina {
     
     public int sizeNotas() {
     	return notas.size();
-    }
-    
-    public void addComentario(Comentario comentario) {
-    	this.comentarios.add(comentario);
     }
 }

@@ -2,6 +2,8 @@ package projeto.rest.controller;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.bytebuddy.asm.Advice.This;
 import projeto.exception.DisciplinaNotFoundException;
 import projeto.exception.UsuarioAlreadyExistsException;
 import projeto.exception.UsuarioNotFoundException;
@@ -23,7 +26,6 @@ import projeto.rest.model.Nota;
 import projeto.rest.model.PerfilDisciplina;
 import projeto.rest.model.Usuario;
 import projeto.rest.response.ComentarioResponse;
-import projeto.rest.response.DisciplinaResponse;
 import projeto.rest.response.PerfilDisciplinaResponse;
 import projeto.rest.service.DisciplinaService;
 import projeto.rest.service.PerfilDisciplinaService;
@@ -63,7 +65,7 @@ public class PerfilDisciplinaController {
 			perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());
 		}
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
@@ -177,7 +179,7 @@ public class PerfilDisciplinaController {
 			perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());
 		}		
 			
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
@@ -190,7 +192,6 @@ public class PerfilDisciplinaController {
 	}	
 	
 	//Dá um like em uma determinado perfil de disciplina
-	//!!!!!!!!Falta resolver: De alguma forma tem que passar o email do usuário atual que está logado!!!!!!!!!!
 	@PostMapping(value = "/{id}/like/{email}")
 	public ResponseEntity<PerfilDisciplinaResponse> like(@PathVariable long id, @PathVariable String email) {
 		Disciplina disciplina = disciplinaService.findById(id);
@@ -230,15 +231,28 @@ public class PerfilDisciplinaController {
 			throw new UsuarioAlreadyExistsException("Usuário já deu like");
 		}	
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
 				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
 			}
+		}	
+		
+		boolean curtiu = false;
+		
+		for (int i = 0; i < perfil.getLikes().size(); i ++) {
+			if(perfil.getLikes().get(i).getEmailUsuario().equals(email)) {
+				curtiu = true;
+			}
 		}		
+		
 		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+
+        if (curtiu == true) {
+			perfilResponse.setCurtiu(true);
+		}
 
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);  
     } 
@@ -255,7 +269,7 @@ public class PerfilDisciplinaController {
 			
 		this.perfilDisciplinaService.retirarLike(perfil, idLike);
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
@@ -291,7 +305,7 @@ public class PerfilDisciplinaController {
 		Nota newNota = new Nota(nota, perfil);
 		this.perfilDisciplinaService.adicionarNota(perfil, newNota);
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
@@ -306,7 +320,6 @@ public class PerfilDisciplinaController {
 	}
 	
 	// Registra um comentário do usuário atual que está logado em determinado perfil de disciplina
-	//!!!!!!!!Falta resolver: De alguma forma tem que passar o email do usuário atual que está logado!!!!!!!!!!
 	@PostMapping(value = "/{id}/comentario/{email}/{comentario}")
 	public ResponseEntity<PerfilDisciplinaResponse> comentario(@PathVariable long id, @PathVariable String email, @PathVariable String comentario) {
 		Disciplina disciplina = disciplinaService.findById(id);
@@ -331,19 +344,31 @@ public class PerfilDisciplinaController {
 			perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());
 		}			
 		
-		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), perfil);
+		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), disciplina.getNome());
 		
-		this.perfilDisciplinaService.adicionarComentario(perfil, newComentario);
+		this.perfilDisciplinaService.adicionarComentario(perfil.getNomeDisciplina(), newComentario);
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil.getNomeDisciplina());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
 				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
 			}
+		}	
+		
+		boolean curtiu = false;
+		
+		for (int i = 0; i < perfil.getLikes().size(); i ++) {
+			if(perfil.getLikes().get(i).getEmailUsuario().equals(email)) {
+				curtiu = true;
+			}
 		}		
 		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+
+        if (curtiu == true) {
+			perfilResponse.setCurtiu(true);
+		}
 
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);  
 
@@ -360,9 +385,9 @@ public class PerfilDisciplinaController {
 	
 	    perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());	    
 
-		this.perfilDisciplinaService.deletarComentario(perfil, idComentario);	
+		this.perfilDisciplinaService.deletarComentario(perfil.getNomeDisciplina(), idComentario);	
 		
-		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil);		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(perfil.getNomeDisciplina());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
@@ -370,52 +395,87 @@ public class PerfilDisciplinaController {
 				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
 			}
 		}		
+		
 		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
 
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);  
 
 	}
 	
-//	@GetMapping(value = "/ranking") 
-//	public ResponseEntity<ArrayList<String>> ranking() {
-//		Disciplina disciplina = disciplinaService.findById(id);
-//		if (disciplina == null) {
-//			throw new DisciplinaNotFoundException("Disciplina não encontrada");
-//		} 		
-		
-//		PerfilDisciplina perfil;	
-//	    perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());	    
-		
-//	}
-	
-	
-	//Ainda nao está correto
-/*	@PostMapping(value = "/{id}/comentario/comentarioFilho/{email}/{comentario}")
-	public ResponseEntity<PerfilDisciplina>	comentarioResposta(@PathVariable long id, @PathVariable String email, @PathVariable String comentario) {
-		Disciplina disciplina = disciplinaService.findById(id);
-		if (disciplina == null) {
-			throw new DisciplinaNotFoundException("Disciplina não encontrada");
-		} 
-		
+	//Faz comentário em outros comentários
+	//O ID é do comentário pai
+	@PostMapping(value = "/{id}/comentario_resposta/{email}/{comentario}")
+	public ResponseEntity<List<ComentarioResponse>> comentarioResposta(@PathVariable long id, @PathVariable String email, @PathVariable String comentario) {
 		Usuario usuario = usuarioService.findByEmail(email);
 		if (usuario == null) {
 			throw new UsuarioNotFoundException("Usuário não encontrado");
-		}
+		}		
+		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), id);
+		this.perfilDisciplinaService.adicionarComentarioEmComentario(id, newComentario);
 		
-		PerfilDisciplina perfil;
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentariosFilhos(id);
+		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
-		// Se o perfil da disciplina ainda não existe então ele é criado
+		for (int i = 0; i < comentarios.size(); i ++) {
+			if(!comentarios.get(i).getApagado().equals("sim")) {
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
+			}
+		}	
+		return new ResponseEntity<List<ComentarioResponse>>(response, HttpStatus.ACCEPTED);
 
+	}
+	
+	// Busca os comentário de outro comentário
+	@GetMapping(value = "/{id}/comentario_resposta")
+	public ResponseEntity<List<ComentarioResponse>> buscarComentariosFilhos(@PathVariable long id) {
 		
-		if (perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome()) == null) {
-			perfil = new PerfilDisciplina(disciplina.getNome());
-			this.perfilDisciplinaService.create(perfil);
-		} else {
-			perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());
-		}
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentariosFilhos(id);
+		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
 		
-		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), perfil);
-		this.perfilDisciplinaService.adicionarComentarioEmComentario(perfil, id, newComentario);
-		return new ResponseEntity<PerfilDisciplina>(perfil, HttpStatus.ACCEPTED);
-	}*/
+		for (int i = 0; i < comentarios.size(); i ++) {
+			if(!comentarios.get(i).getApagado().equals("sim")) {
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
+			}
+		}	
+		return new ResponseEntity<List<ComentarioResponse>>(response, HttpStatus.OK);
+	}
+	
+	//Apaga comentário de outro comentário
+	@PutMapping(value = "/{id}/comentario_resposta/apagar")
+	public ResponseEntity<List<ComentarioResponse>> apagarComentarioFilho(@PathVariable long id) {		   
+
+		this.perfilDisciplinaService.deletarComentarioFilho(id);	
+		
+		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentariosFilhos(id);
+		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();
+		
+		for (int i = 0; i < comentarios.size(); i ++) {
+			if(!comentarios.get(i).getApagado().equals("sim")) {
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
+			}
+		}	
+		return new ResponseEntity<List<ComentarioResponse>>(response, HttpStatus.ACCEPTED);  
+
+	}
+	
+/*	@GetMapping(value = "/ranking") 
+	public ResponseEntity<ArrayList<PerfilDisciplina>> ranking() {
+		
+		ArrayList<PerfilDisciplina> ranking = new ArrayList<PerfilDisciplina>();
+		
+		List<PerfilDisciplina> perfis = this.perfilDisciplinaService.getAll();		
+		
+        List<List> likes = null; 
+        
+        for(int i = 0; i < perfis.size(); i ++) {
+        	likes.add(perfis.get(i).getLikes());
+        }
+        
+        Collections.sort(likes, new Comparator<List>(){
+            public int compare(List a1, List a2) {
+                return a2.size() - a1.size(); // assumes you want biggest to smallest
+            }
+        });            
+		
+	}*/	
 }

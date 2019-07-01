@@ -13,6 +13,7 @@ import projeto.rest.model.PerfilDisciplina;
 @Repository
 public interface ComentarioDAO <T, ID extends Serializable> extends JpaRepository<Comentario, Long> {
 	Comentario save(Comentario comentario);
-	List<Comentario> findAllByPerfil(PerfilDisciplina perfil);
+	List<Comentario> findAllByNomeDisciplina(String nome);
     Comentario findById(long id);
+    List<Comentario> findAllByComentarioPai(long id);
 }

@@ -56,22 +56,22 @@ public class PerfilDisciplinaService {
 		return perfil;
 	}
 	
-	public List<Comentario> buscarComentarios(PerfilDisciplina perfil) {
-		return this.comentarioDao.findAllByPerfil(perfil);
+	public List<Comentario> buscarComentarios(String disciplina) {
+		return this.comentarioDao.findAllByNomeDisciplina(disciplina);
 	}
 	
-	public PerfilDisciplina adicionarComentario(PerfilDisciplina perfil, Comentario comentario) {		
-		comentario.setPerfil(perfil);
+	public PerfilDisciplina adicionarComentario(String disciplina, Comentario comentario) {		
+		comentario.setNomeDisciplina(disciplina);
 		this.comentarioDao.save(comentario);				
-		return perfil;		
+		return this.perfilDisciplinaDao.findByNomeDisciplina(disciplina);
 	}
 	
-	public PerfilDisciplina deletarComentario(PerfilDisciplina perfil, long idComentario) {	
+	public PerfilDisciplina deletarComentario(String disciplina, long idComentario) {	
 		Comentario comentario = this.comentarioDao.findById(idComentario);
-		comentario.setPerfil(perfil);	
+		comentario.setNomeDisciplina(disciplina);	
 		comentario.setApagado("sim");
 		this.comentarioDao.save(comentario);				
-		return perfil;		
+		return this.perfilDisciplinaDao.findByNomeDisciplina(disciplina);		
 	}
 	
 	public PerfilDisciplina retirarLike(PerfilDisciplina perfil, long id) {
@@ -81,12 +81,26 @@ public class PerfilDisciplinaService {
         return perfil;
 	}
 	//FaltaResolver
-	public PerfilDisciplina adicionarComentarioEmComentario(PerfilDisciplina perfil, long idComentarioPai, Comentario comentarioFilho) {
-		comentarioFilho.setPerfil(perfil);
-		Comentario comentario = this.comentarioDao.findById(idComentarioPai);		
-		//comentario.setFilhos(comentario.);
-		this.perfilDisciplinaDao.save(perfil);
-		return perfil;
+	public List<Comentario> adicionarComentarioEmComentario(long idComentarioPai, Comentario comentarioFilho) {
+		comentarioFilho.setComentarioPai(idComentarioPai);
+		this.comentarioDao.save(comentarioFilho);
+		return this.comentarioDao.findAllByComentarioPai(idComentarioPai);
+		
+	}	
+	
+	public List<Comentario> buscarComentariosFilhos(long idComentarioPai) {
+		return this.comentarioDao.findAllByComentarioPai(idComentarioPai);		
+	}
+	
+	public List<Comentario> deletarComentarioFilho(long idComentario) {	
+		Comentario comentario = this.comentarioDao.findById(idComentario);
+		comentario.setApagado("sim");
+		this.comentarioDao.save(comentario);				
+		return this.comentarioDao.findAllByComentarioPai(idComentario);	
+	}
+	
+	public List<PerfilDisciplina> getAll() {
+		return this.perfilDisciplinaDao.findAll();
 	}
 	
 }
