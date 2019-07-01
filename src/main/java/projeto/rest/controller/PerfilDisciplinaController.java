@@ -46,8 +46,8 @@ public class PerfilDisciplinaController {
 	}	
 		
 	// Recupera o perfil da disciplina a partir do id
-	@GetMapping(value = "/{id}") 
-	public ResponseEntity<PerfilDisciplinaResponse> procurar(@PathVariable long id) {
+	@GetMapping(value = "/{id}/{email}") 
+	public ResponseEntity<PerfilDisciplinaResponse> procurar(@PathVariable long id, @PathVariable String email) {
 		Disciplina disciplina = disciplinaService.findById(id);		
 		if (disciplina == null) {
 			throw new DisciplinaNotFoundException("Disciplina não encontrada");
@@ -70,9 +70,20 @@ public class PerfilDisciplinaController {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
 				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getDataEHora()));	
 			}
+		}	
+		
+		boolean curtiu = false;
+		
+		for (int i = 0; i < perfil.getLikes().size(); i ++) {
+			if(perfil.getLikes().get(i).getEmailUsuario().equals(email)) {
+				curtiu = true;
+			}
 		}		
 		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
 
+        if (curtiu == true) {
+			perfilResponse.setCurtiu(true);
+		}
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.OK);
 	}
 	

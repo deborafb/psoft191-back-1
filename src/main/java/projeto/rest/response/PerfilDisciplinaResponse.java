@@ -15,6 +15,7 @@ public class PerfilDisciplinaResponse {
 	private List<ComentarioResponse> comentarios;		
 	private List<Likes> likes;		
 	private List<Nota> notas;    
+	private boolean curtiu;
    
     public PerfilDisciplinaResponse(String nome, List<ComentarioResponse> comentarios, List<Likes> likes, List<Nota> notas) {
     	this.nomeDisciplina = nome;
