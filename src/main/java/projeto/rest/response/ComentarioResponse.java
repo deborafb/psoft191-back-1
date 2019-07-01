@@ -9,14 +9,15 @@ public class ComentarioResponse {
 
     private Long id;	
 	private String comentario;
+	private String emailUsuario;
 	private String usuario;
 	private Date dataEHora;	
     
-	public ComentarioResponse(long id, String comentario, String emailUsuario, Date data) {
+	public ComentarioResponse(long id, String comentario, String emailUsuario, String usuario, Date data) {
 		this.id = id;
 		this.comentario = comentario;
-		this.usuario = emailUsuario;
-	    this.dataEHora = data;
-	}	
-	
+		this.emailUsuario = emailUsuario;
+	    this.usuario = usuario;
+		this.dataEHora = data;	    
+	}		
 }

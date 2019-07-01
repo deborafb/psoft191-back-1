@@ -19,6 +19,7 @@ public class Comentario {
 	
 	private String comentario;
 	private String usuario;
+	private String emailUsuario;
 	private Date dataEHora;	
 	private String apagado;
 	private Long comentarioPai;
@@ -28,17 +29,20 @@ public class Comentario {
 		
 	}
     
-	public Comentario(String comentario, String emailUsuario, String nomeDisciplina) {
+	public Comentario(String comentario, String usuario, String emailUsuario, String nomeDisciplina) {
 		this.comentario = comentario;
-		this.usuario = emailUsuario;
+		this.usuario = usuario;
+		this.emailUsuario = emailUsuario;
 	    this.dataEHora = new Date();
 	    this.apagado = "nao";
 	    this.nomeDisciplina = nomeDisciplina;
 	}	
 	
-	public Comentario(String comentario, String emailUsuario, long comentarioPaiId) {
+	public Comentario(String comentario, String usuario, String emailUsuario, long comentarioPaiId) {
 		this.comentario = comentario;
-		this.usuario = emailUsuario;
+		this.usuario = usuario;
+		this.emailUsuario = emailUsuario;
+	    this.dataEHora = new Date();
 	    this.dataEHora = new Date();
 	    this.apagado = "nao";
 	    this.comentarioPai = comentarioPaiId;
