@@ -13,7 +13,7 @@ public class ComentarioResponse {
 	private String usuario;
 	private Date dataEHora;	
     
-	public ComentarioResponse(long id, String comentario, String emailUsuario, String usuario, Date data) {
+	public ComentarioResponse(long id, String comentario,  String usuario, String emailUsuario, Date data) {
 		this.id = id;
 		this.comentario = comentario;
 		this.emailUsuario = emailUsuario;
