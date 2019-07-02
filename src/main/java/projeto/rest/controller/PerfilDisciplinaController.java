@@ -258,8 +258,8 @@ public class PerfilDisciplinaController {
     } 
 	
 	//Remove o like de determinada disciplina (apenas likes do usuario atual poderão ser removidos)
-	@PutMapping(value = "/{id}/removeLike/{idLike}")
-	public ResponseEntity<PerfilDisciplinaResponse> removeLike(@PathVariable long id, @PathVariable long idLike) {
+	@PutMapping(value = "/{id}/remove_like/{email}")
+	public ResponseEntity<PerfilDisciplinaResponse> removeLike(@PathVariable long id, @PathVariable String email) {
 		Disciplina disciplina = disciplinaService.findById(id);
 		if (disciplina == null) {
 			throw new DisciplinaNotFoundException("Disciplina não encontrada");
@@ -267,7 +267,7 @@ public class PerfilDisciplinaController {
 		
 		PerfilDisciplina perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());
 			
-		this.perfilDisciplinaService.retirarLike(perfil, idLike);
+		this.perfilDisciplinaService.retirarLike(perfil, email);
 		
 		List<Comentario> comentarios = this.perfilDisciplinaService.buscarComentarios(disciplina.getNome());		
 		List<ComentarioResponse> response = new ArrayList<ComentarioResponse>();

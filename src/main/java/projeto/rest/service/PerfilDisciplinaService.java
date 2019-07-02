@@ -74,13 +74,19 @@ public class PerfilDisciplinaService {
 		return this.perfilDisciplinaDao.findByNomeDisciplina(disciplina);		
 	}
 	
-	public PerfilDisciplina retirarLike(PerfilDisciplina perfil, long id) {
-		Likes like = this.likeDao.findById(id);
-		like.setPerfil(perfil);
-        this.likeDao.removeById(id);
+	public PerfilDisciplina retirarLike(PerfilDisciplina perfil, String email) {
+		List<Likes> likes = this.likeDao.findAllByPerfil(perfil);
+		for (int i = 0; i < likes.size(); i ++) {
+			if (likes.get(i).getEmailUsuario().equals(email)) {
+				this.likeDao.removeById(likes.get(i).getId());
+			}
+		}
+		//Likes like = this.likeDao.findById(id);
+		//like.setPerfil(perfil);
+        //this.likeDao.removeById(id);
         return perfil;
 	}
-	//FaltaResolver
+	
 	public List<Comentario> adicionarComentarioEmComentario(long idComentarioPai, Comentario comentarioFilho) {
 		comentarioFilho.setComentarioPai(idComentarioPai);
 		this.comentarioDao.save(comentarioFilho);

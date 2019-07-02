@@ -21,6 +21,5 @@ public interface LikeDAO<T, ID extends Serializable> extends JpaRepository<Likes
 	@Modifying
 	@Query("DELETE FROM Likes l WHERE l.id=:id")
 	void removeById(@Param("id") long id);
-	Likes findById(long id);
 	List<Likes> findAllByPerfil(PerfilDisciplina perfil);
 }
