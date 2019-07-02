@@ -458,24 +458,48 @@ public class PerfilDisciplinaController {
 
 	}
 	
-/*	@GetMapping(value = "/ranking") 
-	public ResponseEntity<ArrayList<PerfilDisciplina>> ranking() {
+	@GetMapping(value = "/ranking") 
+	public ResponseEntity<List<String>> ranking() {		
 		
-		ArrayList<PerfilDisciplina> ranking = new ArrayList<PerfilDisciplina>();
+		List<Disciplina> disciplinas = this.disciplinaService.getAll();
 		
+		for(int i = 0; i < disciplinas.size(); i ++) {
+			PerfilDisciplina perfil;
+			// Se o perfil da disciplina ainda não existe então ele é criado
+			if (perfilDisciplinaService.findByNomeDisciplina(disciplinas.get(i).getNome()) == null) {
+				perfil = new PerfilDisciplina(disciplinas.get(i).getNome());				
+				this.perfilDisciplinaService.create(perfil);
+			} 
+		}
+				
 		List<PerfilDisciplina> perfis = this.perfilDisciplinaService.getAll();		
 		
-        List<List> likes = null; 
+        List<List<Likes>> likes = new ArrayList<>(); 
         
         for(int i = 0; i < perfis.size(); i ++) {
         	likes.add(perfis.get(i).getLikes());
         }
         
-        Collections.sort(likes, new Comparator<List>(){
-            public int compare(List a1, List a2) {
-                return a2.size() - a1.size(); // assumes you want biggest to smallest
+        Collections.sort(likes, new Comparator<List<Likes>>(){
+            public int compare(List<Likes> a1, List<Likes> a2) {
+                return a2.size() - a1.size(); // ordena do maior para o menor
             }
-        });            
-		
-	}*/	
+        }); 
+        
+        List<String> rank = new ArrayList<>();
+
+        for(int i = 0; i < likes.size(); i ++) {
+        	if (likes.get(i).size() > 0) {
+            	rank.add(i + 1 + " - " + likes.get(i).get(0).getPerfil().getNomeDisciplina() + " - " + likes.get(i).size() + " like(s)");
+        	} 
+        } 
+        
+        for(int i = 0; i < perfis.size(); i ++) {
+        	if (perfis.get(i).getLikes().size() == 0) {
+        		rank.add(rank.size() + 1 + " - " + perfis.get(i).getNomeDisciplina() + " - 0 like(s)");
+        	}
+        }
+        
+        return new ResponseEntity<List<String>>(rank, HttpStatus.OK); 		
+	}	
 }

@@ -80,10 +80,7 @@ public class PerfilDisciplinaService {
 			if (likes.get(i).getEmailUsuario().equals(email)) {
 				this.likeDao.removeById(likes.get(i).getId());
 			}
-		}
-		//Likes like = this.likeDao.findById(id);
-		//like.setPerfil(perfil);
-        //this.likeDao.removeById(id);
+		}		
         return perfil;
 	}
 	

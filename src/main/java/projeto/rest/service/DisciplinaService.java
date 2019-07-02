@@ -32,4 +32,8 @@ public class DisciplinaService {
 	public static Disciplina create(Disciplina disciplina) {
 		return disciplinaDao.save(disciplina);
 	}
+	
+	public List<Disciplina> getAll() {
+		return disciplinaDao.findAll();
+	}
 }
