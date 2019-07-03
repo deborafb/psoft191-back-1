@@ -23,9 +23,7 @@ public class PerfilDisciplina {
 	
 	@OneToMany(mappedBy="perfil")
 	@JsonManagedReference
-	private List<Nota> notas;	
-
-		
+	private List<Nota> notas;			
     
     public PerfilDisciplina() {
     	
