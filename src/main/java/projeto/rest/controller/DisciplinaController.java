@@ -41,20 +41,11 @@ public class DisciplinaController {
 	
 	@PostMapping(value = "/")
 	@ResponseBody
-	public ResponseEntity<Disciplina> create(@RequestBody Disciplina disciplina) {
-
-		if (disciplina.getNome() == null) { 
-			throw new DisciplinaInvalidaException("Disciplina inválida, preencha todos os campos corretamente");
-		}
+	public ResponseEntity<Disciplina> create(@RequestBody Disciplina disciplina) {		
 		
-	    Disciplina newDisciplina = DisciplinaService.create(disciplina);
-	    
-	    if (newDisciplina == null) {
-	        //500?!?!
-	        throw  new InternalError("Algo não está certo");
-	    }
+	    Disciplina novaDisciplina = DisciplinaService.create(disciplina);	    
 
-	    return new ResponseEntity<Disciplina>(newDisciplina, HttpStatus.CREATED);
+	    return new ResponseEntity<Disciplina>(novaDisciplina, HttpStatus.CREATED);
 	}
 
 }
