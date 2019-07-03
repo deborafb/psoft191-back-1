@@ -47,7 +47,7 @@ public class DisciplinaService {
 			throw new DisciplinaInvalidaException("Disciplina inválida, preencha todos os campos corretamente");
 		}
 		
-	    Disciplina novaDisciplina = DisciplinaService.create(disciplina);
+	    Disciplina novaDisciplina = disciplinaDao.save(disciplina);
 	    
 	    if (novaDisciplina == null) {
 	        throw  new InternalError("Algo não está certo");
