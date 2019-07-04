@@ -22,6 +22,7 @@ import projeto.rest.model.PerfilDisciplina;
 import projeto.rest.model.Usuario;
 import projeto.rest.response.ComentarioResponse;
 import projeto.rest.response.PerfilDisciplinaResponse;
+import projeto.rest.response.RankingResponse;
 import projeto.rest.service.DisciplinaService;
 import projeto.rest.service.PerfilDisciplinaService;
 import projeto.rest.service.UsuarioService;
@@ -351,10 +352,10 @@ public class PerfilDisciplinaController {
 	}
 	
 	@GetMapping(value = "/ranking") 
-	public ResponseEntity<List<String>> ranking() {		
+	public ResponseEntity<List<RankingResponse>> ranking() {		
 		
-		List<String> rank = this.perfilDisciplinaService.ranking();		
+		List<RankingResponse> rank = this.perfilDisciplinaService.ranking();		
         
-        return new ResponseEntity<List<String>>(rank, HttpStatus.OK); 		
+        return new ResponseEntity<List<RankingResponse>>(rank, HttpStatus.OK); 		
 	}	
 }

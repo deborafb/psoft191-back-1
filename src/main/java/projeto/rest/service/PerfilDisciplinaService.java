@@ -16,6 +16,7 @@ import projeto.rest.model.Disciplina;
 import projeto.rest.model.Likes;
 import projeto.rest.model.Nota;
 import projeto.rest.model.PerfilDisciplina;
+import projeto.rest.response.RankingResponse;
 
 @Service
 public class PerfilDisciplinaService {
@@ -122,7 +123,7 @@ public class PerfilDisciplinaService {
 		return this.perfilDisciplinaDao.findAll();
 	}
 	
-	public List<String> ranking(){
+	public List<RankingResponse> ranking(){
 		
         List<Disciplina> disciplinas = this.disciplinaService.getAll();
 		
@@ -144,37 +145,20 @@ public class PerfilDisciplinaService {
             }
         });        
         
-        List<String> rank = new ArrayList<>();
+        List<RankingResponse> rank = new ArrayList<>();
 
         for(int i = 0; i < likes.size(); i ++) {
         	if (likes.get(i).size() > 0) {
-            	rank.add(i + 1 + " - " + nomeFormatacao(likes.get(i).get(0).getPerfil().getNomeDisciplina()) + " - " + likes.get(i).size() + " like(s)");
+        		rank.add(new RankingResponse(i + 1, likes.get(i).get(0).getPerfil().getNomeDisciplina(), likes.get(i).size()));        		
         	} 
         } 
         
         for(int i = 0; i < perfis.size(); i ++) {
         	if (perfis.get(i).getLikes().size() == 0) {
-        		rank.add(rank.size() + 1 + " - " + nomeFormatacao(perfis.get(i).getNomeDisciplina()) + " - 0 like(s)");
+        		rank.add(new RankingResponse(rank.size() + 1, perfis.get(i).getNomeDisciplina(), 0));
         	}
         }        
         
         return rank;         
-	}
-	
-	public String nomeFormatacao(String nome) {
-		String saida = "";
-		String[] nomeSaida = nome.split(" ");
-	    for(int i = 0; i < nomeSaida.length; i ++) {
-	    	saida += nomeSaida[i].substring(0, 1) + nomeSaida[i].substring(1, nomeSaida[i].length()).toLowerCase() + " ";	    	
-	    }
-	    saida = saida.trim();
-	    if (saida.substring(saida.length()-2, saida.length()).equals("ii")) {
-	    	saida = saida.substring(0, saida.length()-2);
-	    	saida += "II";
-	    } else if (saida.substring(saida.length()-1, saida.length()).equals("i")) {
-	    	saida = saida.substring(0, saida.length()-1);
-	    	saida += "I";
-	    }
-	    return saida;	
-	}
+	}	
 }
