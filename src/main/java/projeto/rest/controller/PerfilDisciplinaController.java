@@ -36,7 +36,8 @@ public class PerfilDisciplinaController {
     private UsuarioService usuarioService;
    
     
-	public PerfilDisciplinaController(PerfilDisciplinaService perfilDisciplinaService, DisciplinaService disciplinaService, UsuarioService usuarioService) {
+	public PerfilDisciplinaController(PerfilDisciplinaService perfilDisciplinaService, 
+					  DisciplinaService disciplinaService, UsuarioService usuarioService) {
 		this.perfilDisciplinaService = perfilDisciplinaService;
 		this.disciplinaService = disciplinaService;
 		this.usuarioService = usuarioService;
@@ -54,7 +55,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}
 		
@@ -65,7 +70,9 @@ public class PerfilDisciplinaController {
 			}
 		}		
 		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), 
+										       response, perfil.getLikes(), 
+										       perfil.getNotas());
 
         if (curtiu == true) {
 			perfilResponse.setCurtiu(true);
@@ -125,7 +132,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(),
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}
 		
@@ -162,7 +173,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(),
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}	
 		
@@ -197,10 +212,17 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(),
+								    comentarios.get(i).getUsuario(),
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
+			
 		}		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), 
+										       response, perfil.getLikes(),
+										       perfil.getNotas());
 		
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);		 
 	}	
@@ -222,11 +244,17 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}	
 		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), 
+										       response, perfil.getLikes(), 
+										       perfil.getNotas());
 
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);  
 
@@ -241,7 +269,8 @@ public class PerfilDisciplinaController {
 		
 		PerfilDisciplina perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());			
 		
-		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), email, disciplina.getNome());
+		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), 
+							  email, disciplina.getNome());
 		
 		this.perfilDisciplinaService.adicionarComentario(perfil.getNomeDisciplina(), newComentario);
 		
@@ -250,7 +279,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(),
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}	
 		
@@ -262,7 +295,9 @@ public class PerfilDisciplinaController {
 			}
 		}		
 		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), 
+										       response, perfil.getLikes(), 
+										       perfil.getNotas());
 
         if (curtiu == true) {
 			perfilResponse.setCurtiu(true);
@@ -285,11 +320,17 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}		
 		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(),
+										       response, perfil.getLikes(), 
+										       perfil.getNotas());
 
 		return new ResponseEntity<PerfilDisciplinaResponse>(perfilResponse, HttpStatus.ACCEPTED);  
 
@@ -298,10 +339,13 @@ public class PerfilDisciplinaController {
 	//Faz comentário em outros comentários
 	//O ID é do comentário pai
 	@PostMapping(value = "/{id}/comentario_resposta/{email}/{comentario}")
-	public ResponseEntity<List<ComentarioResponse>> comentarioResposta(@PathVariable long id, @PathVariable String email, @PathVariable String comentario) {
+	public ResponseEntity<List<ComentarioResponse>> comentarioResposta(@PathVariable long id, 
+									   @PathVariable String email, 
+									   @PathVariable String comentario) {
 		Usuario usuario = usuarioService.findByEmail(email);
 		
-		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), email, id);
+		Comentario newComentario = new Comentario(comentario, usuario.getPrimeiroNome() + " " + usuario.getUltimoNome(), 
+							  email, id);
 		
 		this.perfilDisciplinaService.adicionarComentarioEmComentario(id, newComentario);
 		
@@ -310,7 +354,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(!comentarios.get(i).getApagado().equals("sim")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(),
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}
 		
@@ -327,7 +375,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(comentarios.get(i).getApagado().equals("nao")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(),
+								    comentarios.get(i).getComentario(),
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(),
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}	
 		return new ResponseEntity<List<ComentarioResponse>>(response, HttpStatus.OK);
@@ -344,7 +396,11 @@ public class PerfilDisciplinaController {
 		
 		for (int i = 0; i < comentarios.size(); i ++) {
 			if(comentarios.get(i).getApagado().equals("nao")) {
-				response.add(new ComentarioResponse(comentarios.get(i).getId(), comentarios.get(i).getComentario(), comentarios.get(i).getUsuario(), comentarios.get(i).getEmailUsuario(), comentarios.get(i).getDataEHora()));	
+				response.add(new ComentarioResponse(comentarios.get(i).getId(), 
+								    comentarios.get(i).getComentario(), 
+								    comentarios.get(i).getUsuario(), 
+								    comentarios.get(i).getEmailUsuario(), 
+								    comentarios.get(i).getDataEHora()));	
 			}
 		}	
 		return new ResponseEntity<List<ComentarioResponse>>(response, HttpStatus.ACCEPTED);  
