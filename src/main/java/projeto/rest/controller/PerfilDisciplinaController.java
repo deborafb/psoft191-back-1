@@ -189,7 +189,9 @@ public class PerfilDisciplinaController {
 			}
 		}		
 		
-		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), response, perfil.getLikes(), perfil.getNotas());
+		PerfilDisciplinaResponse perfilResponse = new PerfilDisciplinaResponse(perfil.getNomeDisciplina(), 
+										       response, perfil.getLikes(), 
+										       perfil.getNotas());
 
         if (curtiu == true) {
 			perfilResponse.setCurtiu(true);
@@ -262,7 +264,8 @@ public class PerfilDisciplinaController {
 	
 	// Registra um comentário em determinado perfil de disciplina
 	@PostMapping(value = "/{id}/comentario/{email}/{comentario}")
-	public ResponseEntity<PerfilDisciplinaResponse> comentario(@PathVariable long id, @PathVariable String email, @PathVariable String comentario) {
+	public ResponseEntity<PerfilDisciplinaResponse> comentario(@PathVariable long id, @PathVariable String email,
+								   @PathVariable String comentario) {
 		Disciplina disciplina = disciplinaService.findById(id);
 		
 		Usuario usuario = usuarioService.findByEmail(email);
@@ -308,7 +311,8 @@ public class PerfilDisciplinaController {
 	}
 	// Apaga um comentário
 	@DeleteMapping(value = "/{id}/comentario/{idComentario}")
-	public ResponseEntity<PerfilDisciplinaResponse> apagarComentario(@PathVariable long id, @PathVariable long idComentario) {
+	public ResponseEntity<PerfilDisciplinaResponse> apagarComentario(@PathVariable long id, 
+									 @PathVariable long idComentario) {
 		Disciplina disciplina = disciplinaService.findById(id);				
 		
 		PerfilDisciplina perfil = perfilDisciplinaService.findByNomeDisciplina(disciplina.getNome());	        
